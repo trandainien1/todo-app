@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<h1>Sign up</h1>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+<form method='POST' action=''>
+    {% csrf_token %}
+    <div>Username:</div>
+    <div>{{form.username}}</div>
+
+    <div>Email:</div>
+    <div>{{form.email}}</div>
+
+    <div>Password:</div>
+    <div>{{form.password1}}</div>
+
+    <div>Confirm password:</div>
+    <div>{{form.password2}}</div>
+
+    <input type='submit' value='Sign up' />
+<form/>
+
+{% endblock content %}

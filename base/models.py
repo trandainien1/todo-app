@@ -5,11 +5,12 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class CustomUser(AbstractUser):
     email = models.EmailField(null=True, unique=True)
-    name = models.CharField(max_length=200, null=True) 
+    # name = models.CharField(max_length=200, null=True) 
     avatar = models.ImageField(null=True, default='')
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    # REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
     
 
 class Task(models.Model):
@@ -21,7 +22,3 @@ class Task(models.Model):
         return self.description[:50]
 
 
-class TaskForm(forms.ModelForm):
-    class Meta:
-        model = Task
-        fields = '__all__'

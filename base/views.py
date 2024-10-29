@@ -4,15 +4,18 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib import messages
+from .forms import MyUserCreationForm, TaskForm
 
 @login_required(login_url='login')
 def home(request):
-    tasks = Task.objects.all()
     form = TaskForm()
+    tasks = request.user.task_set.all()
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
-            form.save()
+            task = form.save(commit=False)
+            task.user = request.user
+            task.save()
             return redirect('home')
 
     context = {'tasks': tasks, 'form': form}
@@ -50,3 +53,24 @@ def loginPage(request):
 def logoutUser(request):
     logout(request)
     return redirect('home')
+
+def signup(request):
+    form = MyUserCreationForm()
+    if request.method == 'POST':
+        form = MyUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'An error occurred during registration')
+    context = {'form': form}
+    return render(request, 'base/signup.html', context)
+
+# def show_tasks(request):
+#     # user = CustomUser.objects.get(id=pk)
+#     tasks = request.user.task_set.all()
+#     context = {'tasks': tasks}
+#     return render(request, 'base/home.html', context)
