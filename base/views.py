@@ -97,5 +97,7 @@ def add_task(request):
             )
             new_task.save()
             return redirect('home')
+        else:
+            messages.error(request, 'Please fill all the fields')
     context = {}
     return render(request, 'base/add_task.html', context)
