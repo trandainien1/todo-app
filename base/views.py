@@ -101,3 +101,27 @@ def add_task(request):
             messages.error(request, 'Please fill all the fields')
     context = {}
     return render(request, 'base/add_task.html', context)
+
+def all_task(request):
+    tasks = Task.objects.all()
+    context = {
+        'tasks': tasks,
+        'page_title': 'All tasks',
+    }
+    return render(request, 'base/home.html', context)
+
+def completed_task(request):
+    tasks = Task.objects.filter(completed=True)
+    context = {
+        'tasks': tasks,
+        'page_title': 'Completed task',
+    }
+    return render(request, 'base/home.html', context)
+
+def todo_task(request):
+    tasks = Task.objects.filter(completed=False)
+    context = {
+        'tasks': tasks,
+        'page_title': 'To do task',
+    }
+    return render(request, 'base/home.html', context)

@@ -15,9 +15,16 @@
         <a href='{% url 'logout' %}'>Logout</a>
         <h1>Todo list</h1> 
 
+        <div>
         <a href='{% url 'add-task' %}'>Add task</a>
+        </div>
 
-        <h2> All Tasks </h2>
+        <div>
+            <a href='{% url 'all-task' %}' style='margin-right: 24px;'>All Tasks</a>
+            <a href='{% url 'completed-task' %}' style='margin-right: 24px;'>Completed Tasks</a>
+            <a href='{% url 'todo-task' %}'>Todo Tasks</a>
+        </div>
+        <h2> {{page_title}} </h2>
         <div>
             {% for task in tasks %}
                 {% if task.completed %}
@@ -41,36 +48,6 @@
             {% endfor %}
         </div>
 
-
-        <h2> Completed </h2>
-        <div>
-            {% for task in completed_tasks %}
-                <div class='task_container'>
-                    <div>
-                        <a href='{% url 'toggle-task' task.id %}'><i class="fa fa-check-circle" aria-hidden='true'></i></a>
-                        <a href='{% url 'edit-task' task.id %}'>{{task}}</a>
-                    </div>
-                    <a href={% url 'delete-task' task.id %}>Delete</a>
-                </div>
-                <hr>
-            {% endfor %}
-        </div>
-
-         <h2> To do </h2>
-        <div>
-            {% for task in todo_tasks %}
-                <div class='task_container'>
-                    <div>
-                        <a href='{% url 'toggle-task' task.id %}'><i class="fa fa-check-circle-o" aria-hidden='true'></i></a>
-                        <a href='{% url 'edit-task' task.id %}'>{{task}}</a>
-                    </div>
-                    <a href={% url 'delete-task' task.id %}>Delete</a>
-                </div>
-                <hr>
-            {% endfor %}
-        </div>
-
-        
     </body>
     {% comment %} {% else %}
         {% include 'base/login.html' %}    
