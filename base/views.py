@@ -10,8 +10,7 @@ from .forms import MyUserCreationForm, TaskForm
 def home(request):
     form = TaskForm()
     tasks = request.user.task_set.all()
-    completed_tasks = request.user.task_set.filter(completed=True)
-    todo_tasks = request.user.task_set.filter(completed=False)
+    
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
@@ -23,16 +22,18 @@ def home(request):
     context = {
         'tasks': tasks, 
         'form': form,
-        'completed_tasks': completed_tasks,
-        'todo_tasks': todo_tasks,
     }
     return render(request, 'base/home.html', context)
 
 def delete_task(request, pk):
     task = Task.objects.get(id=pk)
     task.delete()
+    tasks = Task.objects.all() 
+    context = {
+        'tasks': tasks
+    }
     
-    return redirect('home')
+    return render(request, 'base/home.html', context)
 
 def edit_task(request, pk):
     task = Task.objects.filter(id=pk)
