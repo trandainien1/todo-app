@@ -10,6 +10,8 @@ from .forms import MyUserCreationForm, TaskForm
 def home(request):
     form = TaskForm()
     tasks = request.user.task_set.all()
+    completed_tasks = request.user.task_set.filter(completed=True)
+    todo_tasks = request.user.task_set.filter(completed=False)
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
@@ -18,7 +20,12 @@ def home(request):
             task.save()
             return redirect('home')
 
-    context = {'tasks': tasks, 'form': form}
+    context = {
+        'tasks': tasks, 
+        'form': form,
+        'completed_tasks': completed_tasks,
+        'todo_tasks': todo_tasks,
+    }
     return render(request, 'base/home.html', context)
 
 def delete_task(request, pk):
@@ -69,8 +76,10 @@ def signup(request):
     context = {'form': form}
     return render(request, 'base/signup.html', context)
 
-# def show_tasks(request):
-#     # user = CustomUser.objects.get(id=pk)
-#     tasks = request.user.task_set.all()
-#     context = {'tasks': tasks}
-#     return render(request, 'base/home.html', context)
+def toggle_task(request, id):
+    task = Task.objects.get(id=id)
+    if task:
+        task.completed = not task.completed
+        task.save()
+    return redirect('home')
+    

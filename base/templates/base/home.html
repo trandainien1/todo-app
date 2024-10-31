@@ -15,19 +15,64 @@
         <a href='{% url 'logout' %}'>Logout</a>
         <h1>Todo list</h1> 
 
+        <h2> All Tasks </h2>
         <div>
             {% for task in tasks %}
+                {% if task.completed %}
+                    <div class='task_container'>
+                        <div>
+                            <a href='{% url 'toggle-task' task.id %}'><i class="fa fa-check-circle" aria-hidden='true'></i></a>
+                            <a href='{% url 'edit-task' task.id %}'>{{task}}</a>
+                        </div>
+                        <a href={% url 'delete-task' task.id %}>Delete</a>
+                    </div>
+                {% else %}
+                    <div class='task_container'>
+                        <div>
+                            <a href='{% url 'toggle-task' task.id %}'><i class="fa fa-check-circle-o" aria-hidden='true'></i></a>
+                            <a href='{% url 'edit-task' task.id %}'>{{task}}</a>
+                        </div>
+                        <a href={% url 'delete-task' task.id %}>Delete</a>
+                    </div>
+                {% endif %}
+                <hr>
+            {% endfor %}
+        </div>
+
+
+        <h2> Completed </h2>
+        <div>
+            {% for task in completed_tasks %}
                 <div class='task_container'>
-                    <div><a href='{% url 'edit-task' task.id %}'>{{task}}</a></div>
+                    <div>
+                        <a href='{% url 'toggle-task' task.id %}'><i class="fa fa-check-circle" aria-hidden='true'></i></a>
+                        <a href='{% url 'edit-task' task.id %}'>{{task}}</a>
+                    </div>
                     <a href={% url 'delete-task' task.id %}>Delete</a>
                 </div>
                 <hr>
             {% endfor %}
         </div>
 
+         <h2> To do </h2>
+        <div>
+            {% for task in todo_tasks %}
+                <div class='task_container'>
+                    <div>
+                        <a href='{% url 'toggle-task' task.id %}'><i class="fa fa-check-circle-o" aria-hidden='true'></i></a>
+                        <a href='{% url 'edit-task' task.id %}'>{{task}}</a>
+                    </div>
+                    <a href={% url 'delete-task' task.id %}>Delete</a>
+                </div>
+                <hr>
+            {% endfor %}
+        </div>
+
+        <h2>Add new task</h2>
         <form method='POST' action=''>
             {% csrf_token %}
             {{form}}
+            <input type='submit' value='Add'/>
         </form>
     </body>
     {% comment %} {% else %}

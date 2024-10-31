@@ -14,7 +14,11 @@ class CustomUser(AbstractUser):
     
 
 class Task(models.Model):
+    title = models.CharField(max_length=30, blank=False,default='Empty')
     description = models.CharField(max_length=200, blank=False)
+    completed = models.BooleanField(default=False)
+    due_date = models.DateField(null=True)
+    due_time = models.TimeField(null=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(CustomUser, null=True, on_delete=models.CASCADE)

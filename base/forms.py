@@ -6,7 +6,7 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = '__all__'
-        exclude = ['user']
+        exclude = ['user', 'state', 'completed']
     
 class MyUserCreationForm(UserCreationForm):
     class Meta:
