@@ -83,3 +83,19 @@ def toggle_task(request, id):
         task.save()
     return redirect('home')
     
+def add_task(request):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        due_date = request.POST.get('due-date')
+        due_time = request.POST.get('due-time')
+        if title != '' and description != '' and due_date != '' and due_time != '':
+            new_task = Task(
+                title=title, 
+                description=description, due_time=due_time, due_date=due_date,
+                user=request.user,
+            )
+            new_task.save()
+            return redirect('home')
+    context = {}
+    return render(request, 'base/add_task.html', context)

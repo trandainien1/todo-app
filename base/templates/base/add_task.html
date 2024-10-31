@@ -1,0 +1,31 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1>Add new task</h1>
+<form method='POST' action=''>
+    {% csrf_token %}
+    {% comment %} {{form}} {% endcomment %}
+    <label>Title:  
+    </label>
+    <div>
+    <input type='text' name='title' placeholder='Title...'/>
+    </div>
+    <div>
+    <label>Description</label>
+    <div>
+    <textarea type='text' name='description' placeholder='Description...' cols='50' rows='4'></textarea>
+    </div>
+    </div>
+    <div>
+    <label>Due date</label>
+    <input type='date' name='due-date' />
+    </div>
+    <div>
+    <label>Due time</label>
+    <input type='time' name='due-time'/>
+    </div>
+    
+    <input type='submit' value='Add'/>
+</form>
+
+{% endblock content %}

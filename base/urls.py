@@ -10,5 +10,6 @@ urlpatterns = [
     path('logout/', views.logoutUser , name='logout'),
     path('signup/', views.signup , name='signup'),
     path('toggle-task/<str:id>', views.toggle_task , name='toggle-task'),
+    path('add-task/', views.add_task, name='add-task'),
 ]
 
