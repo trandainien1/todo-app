@@ -34,7 +34,7 @@
                                 <a href='{% url 'toggle-task' task.id %}?page={{page_title}}'>
                                     <i class="fa fa-check-circle" aria-hidden='true'></i>
                                 </a>
-                                <a href='{% url 'edit-task' task.id %}'>{{task.title}}</a>
+                                <a href='{% url 'add-task' task.id %}'>{{task.title}}</a>
                             </div>
                             <a href='{% url 'delete-task' task.id %}?page={{page_title}}'>Delete</a>
                         </div>
@@ -47,7 +47,7 @@
                         <div class='row_container'>
                         <div>
                             <a href='{% url 'toggle-task' task.id %}?page={{page_title}}'><i class="fa fa-check-circle-o" aria-hidden='true'></i></a>
-                            <a href='{% url 'edit-task' task.id %}'>{{task.title}}</a>
+                            <a href='{% url 'add-task' task.id %}'>{{task.title}}</a>
                         </div>
                         <a href='{% url 'delete-task' task.id %}?page={{page_title}}'>Delete</a>
                         </div>

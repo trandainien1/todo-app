@@ -31,6 +31,8 @@ def home(request, filter_type='all'):
         # tasks = Task.objects.all()
         tasks = request.user.task_set.all() 
 
+    tasks = tasks.order_by('-id')
+
     context = {
         'tasks': tasks, 
         'form': form,
@@ -136,24 +138,43 @@ def todo_task(request):
     }
     return render(request, 'base/home.html', context)
 
-def add_task(request):
+def add_task(request, pk=None):
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
-        due_date = request.POST.get('due-date')
-        due_time = request.POST.get('due-time')
+        due_date = request.POST.get('due_date')
+        due_time = request.POST.get('due_time')
         
         if title != '' and description != '' and due_date != '' and due_time != '':
-            new_task = Task(
-                title=title,
-                description=description,
-                due_date=due_date,
-                due_time=due_time,
-                completed=False,
-                user=request.user,
-            )
-            new_task.save()
+            if pk == None:
+                new_task = Task(
+                    title=title,
+                    description=description,
+                    due_date=due_date,
+                    due_time=due_time,
+                    completed=False,
+                    user=request.user,
+                )
+                new_task.save()
+            else:
+                task = Task.objects.get(id=pk)
+                
+                task.title=title
+                task.description=description
+                task.due_date=due_date
+                task.due_time=due_time
+                
+                task.save()
+
             return redirect('home')
         else:
             messages.error(request, 'Please fill out all the fields')
-    return render(request, 'base/add_task.html', {})
+
+    if pk == None: # if user press 'add task'
+        return render(request, 'base/add_task.html', {'task': None})
+    else:
+        task = Task.objects.get(id=pk)
+        print(task)
+        task_form = TaskForm(instance=task)
+        
+        return render(request, 'base/add_task.html', {'task': task, 'form': task_form})

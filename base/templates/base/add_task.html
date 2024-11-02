@@ -11,6 +11,36 @@
     </ul>
 {% endif %}                
 
+{% if task is not None %}
+    <form method='POST' action=''>
+    {% csrf_token %}
+    {% comment %} {{form}} {% endcomment %}
+    <label>Title:  
+    </label>
+    <div>
+    {% comment %} <input type='text' name='title' value={{task.title}}/> {% endcomment %}
+    {{form.title}}
+    </div>
+    <div>
+    <label>Description</label>
+    <div>
+    <textarea type='text' name='description' cols='50' rows='4'>{{task.description}}</textarea>
+    </div>
+    </div>
+    <div>
+    <label>Due date</label>
+    {% comment %} <input type='date' name='due-date' value={{task.due_date}}/> {% endcomment %}
+    {{form.due_date}}
+    </div>
+    <div>
+    <label>Due time</label>
+    {% comment %} <input type='time' name='due-time' value={{task.due_time}}/> {% endcomment %}
+    {{form.due_time}}
+    </div>
+    
+    <input type='submit' value='Add'/>
+    </form>
+{% else %}
 <form method='POST' action=''>
     {% csrf_token %}
     {% comment %} {{form}} {% endcomment %}
@@ -27,14 +57,14 @@
     </div>
     <div>
     <label>Due date</label>
-    <input type='date' name='due-date' />
+    <input type='date' name='due_date' />
     </div>
     <div>
     <label>Due time</label>
-    <input type='time' name='due-time'/>
+    <input type='time' name='due_time'/>
     </div>
     
     <input type='submit' value='Add'/>
 </form>
-
+{% endif %}
 {% endblock content %}
