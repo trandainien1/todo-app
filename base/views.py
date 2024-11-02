@@ -9,7 +9,7 @@ from .forms import MyUserCreationForm, TaskForm
 @login_required(login_url='login')
 def home(request, filter_type='all'):
     form = TaskForm()
-    tasks = request.user.task_set.all()
+    # tasks = request.user.task_set.all()
     
     if request.method == 'POST':
         form = TaskForm(request.POST)
@@ -21,13 +21,15 @@ def home(request, filter_type='all'):
 
     if filter_type == 'todo':
         page_title = 'To Do Tasks'
-        tasks = Task.objects.filter(completed=False) 
+        tasks = request.user.task_set.filter(completed=False) 
     elif filter_type == 'completed':
         page_title = 'Completed Tasks'
-        tasks = Task.objects.filter(completed=True) 
+        # tasks = Task.objects.filter(completed=True) 
+        tasks = request.user.task_set.filter(completed=True) 
     else:
         page_title = 'All Tasks'
-        tasks = Task.objects.all()
+        # tasks = Task.objects.all()
+        tasks = request.user.task_set.all() 
 
     context = {
         'tasks': tasks, 
@@ -95,8 +97,7 @@ def toggle_task(request, id):
         task.completed = not task.completed
         task.save()
         messages.error(request, 'Please fill all the fields')
-    context = {}
-    # return render(request, 'base/add_task.html', context)
+    
     if page_title == 'All Tasks':
         return redirect('home')
     elif page_title == 'To Do Tasks':
@@ -129,4 +130,23 @@ def todo_task(request):
     return render(request, 'base/home.html', context)
 
 def add_task(request):
-    pass
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        due_date = request.POST.get('due-date')
+        due_time = request.POST.get('due-time')
+        
+        if title != '' and description != '' and due_date != '' and due_time != '':
+            new_task = Task(
+                title=title,
+                description=description,
+                due_date=due_date,
+                due_time=due_time,
+                completed=False,
+                user=request.user,
+            )
+            new_task.save()
+            return redirect('home')
+        else:
+            messages.error(request, 'Please fill out all the fields')
+    return render(request, 'base/add_task.html', {})
