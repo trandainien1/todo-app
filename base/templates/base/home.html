@@ -3,7 +3,7 @@
 {% block content%}
         {% comment %} {% if request.user.is_authenticated %} {% endcomment %}
         <style>
-            .task_container {
+            .row_container {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -28,22 +28,32 @@
         <div>
             {% for task in tasks %}
                 {% if task.completed %}
-                    <div class='task_container'>
-                        <div>
-                            <a href='{% url 'toggle-task' task.id %}?page={{page_title}}'>
-                                <i class="fa fa-check-circle" aria-hidden='true'></i>
-                            </a>
-                            <a href='{% url 'edit-task' task.id %}'>{{task}}</a>
+                    <div class=''>
+                        <div class='row_container'>
+                            <div>
+                                <a href='{% url 'toggle-task' task.id %}?page={{page_title}}'>
+                                    <i class="fa fa-check-circle" aria-hidden='true'></i>
+                                </a>
+                                <a href='{% url 'edit-task' task.id %}'>{{task.title}}</a>
+                            </div>
+                            <a href={% url 'delete-task' task.id %}>Delete</a>
                         </div>
-                        <a href={% url 'delete-task' task.id %}>Delete</a>
+                        <div>
+                            {{task.description}}
+                        </div>
                     </div>
                 {% else %}
-                    <div class='task_container'>
+                    <div class=''>
+                        <div class='row_container'>
                         <div>
                             <a href='{% url 'toggle-task' task.id %}?page={{page_title}}'><i class="fa fa-check-circle-o" aria-hidden='true'></i></a>
-                            <a href='{% url 'edit-task' task.id %}'>{{task}}</a>
+                            <a href='{% url 'edit-task' task.id %}'>{{task.title}}</a>
                         </div>
                         <a href={% url 'delete-task' task.id %}>Delete</a>
+                        </div>
+                        <div>
+                            {{task.description}}
+                        </div>
                     </div>
                 {% endif %}
                 <hr>
