@@ -36,10 +36,10 @@
                                 </a>
                                 <a href='{% url 'edit-task' task.id %}'>{{task.title}}</a>
                             </div>
-                            <a href={% url 'delete-task' task.id %}>Delete</a>
+                            <a href='{% url 'delete-task' task.id %}?page={{page_title}}'>Delete</a>
                         </div>
                         <div>
-                            {{task.description}}
+                            {{task.description|truncatewords:10}}
                         </div>
                     </div>
                 {% else %}
@@ -49,10 +49,10 @@
                             <a href='{% url 'toggle-task' task.id %}?page={{page_title}}'><i class="fa fa-check-circle-o" aria-hidden='true'></i></a>
                             <a href='{% url 'edit-task' task.id %}'>{{task.title}}</a>
                         </div>
-                        <a href={% url 'delete-task' task.id %}>Delete</a>
+                        <a href='{% url 'delete-task' task.id %}?page={{page_title}}'>Delete</a>
                         </div>
                         <div>
-                            {{task.description}}
+                            {{task.description|truncatewords:10}}
                         </div>
                     </div>
                 {% endif %}

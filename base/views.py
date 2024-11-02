@@ -39,14 +39,21 @@ def home(request, filter_type='all'):
     return render(request, 'base/home.html', context)
 
 def delete_task(request, pk):
+    page_title = request.GET.get('page')
     task = Task.objects.get(id=pk)
+
     task.delete()
     tasks = Task.objects.all() 
     context = {
         'tasks': tasks
     }
-    
-    return render(request, 'base/home.html', context)
+
+    if page_title == 'All Tasks':
+        return redirect('home')
+    elif page_title == 'To Do Tasks':
+        return redirect('/filter-task/todo')
+    else:
+        return redirect('/filter-task/completed')
 
 def edit_task(request, pk):
     task = Task.objects.filter(id=pk)
