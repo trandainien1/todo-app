@@ -14,5 +14,6 @@ urlpatterns = [
     path('all-task/', views.all_task, name='all-task'),
     path('completed-task/', views.completed_task, name='completed-task'),
     path('todo-task/', views.todo_task, name='todo-task'),
+    path('filter-task/<str:filter_type>', views.home, name='filter-task'),
 ]
 

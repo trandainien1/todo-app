@@ -7,7 +7,7 @@ from django.contrib import messages
 from .forms import MyUserCreationForm, TaskForm
 
 @login_required(login_url='login')
-def home(request):
+def home(request, filter_type='all'):
     form = TaskForm()
     tasks = request.user.task_set.all()
     
@@ -19,9 +19,20 @@ def home(request):
             task.save()
             return redirect('home')
 
+    if filter_type == 'todo':
+        page_title = 'To Do Tasks'
+        tasks = Task.objects.filter(completed=False) 
+    elif filter_type == 'completed':
+        page_title = 'Completed Tasks'
+        tasks = Task.objects.filter(completed=True) 
+    else:
+        page_title = 'All Tasks'
+        tasks = Task.objects.all()
+
     context = {
         'tasks': tasks, 
         'form': form,
+        'page_title': page_title,
     }
     return render(request, 'base/home.html', context)
 
@@ -78,30 +89,20 @@ def signup(request):
     return render(request, 'base/signup.html', context)
 
 def toggle_task(request, id):
+    page_title = request.GET.get('page')
     task = Task.objects.get(id=id)
     if task:
         task.completed = not task.completed
         task.save()
-    return redirect('home')
-    
-def add_task(request):
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-        due_date = request.POST.get('due-date')
-        due_time = request.POST.get('due-time')
-        if title != '' and description != '' and due_date != '' and due_time != '':
-            new_task = Task(
-                title=title, 
-                description=description, due_time=due_time, due_date=due_date,
-                user=request.user,
-            )
-            new_task.save()
-            return redirect('home')
-        else:
-            messages.error(request, 'Please fill all the fields')
+        messages.error(request, 'Please fill all the fields')
     context = {}
-    return render(request, 'base/add_task.html', context)
+    # return render(request, 'base/add_task.html', context)
+    if page_title == 'All Tasks':
+        return redirect('home')
+    elif page_title == 'To Do Tasks':
+        return redirect('/filter-task/todo')
+    else:
+        return redirect('/filter-task/completed')
 
 def all_task(request):
     tasks = Task.objects.all()
@@ -115,7 +116,7 @@ def completed_task(request):
     tasks = Task.objects.filter(completed=True)
     context = {
         'tasks': tasks,
-        'page_title': 'Completed task',
+        'page_title': 'Completed tasks',
     }
     return render(request, 'base/home.html', context)
 
@@ -123,6 +124,9 @@ def todo_task(request):
     tasks = Task.objects.filter(completed=False)
     context = {
         'tasks': tasks,
-        'page_title': 'To do task',
+        'page_title': 'To do tasks',
     }
     return render(request, 'base/home.html', context)
+
+def add_task(request):
+    pass

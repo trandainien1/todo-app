@@ -20,9 +20,9 @@
         </div>
 
         <div>
-            <a href='{% url 'all-task' %}' style='margin-right: 24px;'>All Tasks</a>
-            <a href='{% url 'completed-task' %}' style='margin-right: 24px;'>Completed Tasks</a>
-            <a href='{% url 'todo-task' %}'>Todo Tasks</a>
+            <a href='{% url 'home' %}' style='margin-right: 24px;'>All Tasks</a>
+            <a href='{% url 'filter-task' 'completed' %}' style='margin-right: 24px;'>Completed Tasks</a>
+            <a href='{% url 'filter-task' 'todo' %}'>Todo Tasks</a>
         </div>
         <h2> {{page_title}} </h2>
         <div>
@@ -30,7 +30,9 @@
                 {% if task.completed %}
                     <div class='task_container'>
                         <div>
-                            <a href='{% url 'toggle-task' task.id %}'><i class="fa fa-check-circle" aria-hidden='true'></i></a>
+                            <a href='{% url 'toggle-task' task.id %}?page={{page_title}}'>
+                                <i class="fa fa-check-circle" aria-hidden='true'></i>
+                            </a>
                             <a href='{% url 'edit-task' task.id %}'>{{task}}</a>
                         </div>
                         <a href={% url 'delete-task' task.id %}>Delete</a>
@@ -38,7 +40,7 @@
                 {% else %}
                     <div class='task_container'>
                         <div>
-                            <a href='{% url 'toggle-task' task.id %}'><i class="fa fa-check-circle-o" aria-hidden='true'></i></a>
+                            <a href='{% url 'toggle-task' task.id %}?page={{page_title}}'><i class="fa fa-check-circle-o" aria-hidden='true'></i></a>
                             <a href='{% url 'edit-task' task.id %}'>{{task}}</a>
                         </div>
                         <a href={% url 'delete-task' task.id %}>Delete</a>
