@@ -7,10 +7,10 @@ from django.contrib import messages
 from .forms import MyUserCreationForm, TaskForm
 
 @login_required(login_url='login')
-def home(request, filter_type='all'):
+def home(request, filter_type):
     form = TaskForm()
     # tasks = request.user.task_set.all()
-    
+    nav_text_colors = ['gray'] * 3
     if request.method == 'POST':
         form = TaskForm(request.POST)
         if form.is_valid():
@@ -22,14 +22,17 @@ def home(request, filter_type='all'):
     if filter_type == 'todo':
         page_title = 'To Do Tasks'
         tasks = request.user.task_set.filter(completed=False) 
+        nav_text_colors[2] = 'blue'
     elif filter_type == 'completed':
         page_title = 'Completed Tasks'
         # tasks = Task.objects.filter(completed=True) 
         tasks = request.user.task_set.filter(completed=True) 
+        nav_text_colors[1] = 'blue'
     else:
         page_title = 'All Tasks'
         # tasks = Task.objects.all()
         tasks = request.user.task_set.all() 
+        nav_text_colors[0] = 'blue'
 
     tasks = tasks.order_by('-id')
 
@@ -37,6 +40,7 @@ def home(request, filter_type='all'):
         'tasks': tasks, 
         'form': form,
         'page_title': page_title,
+        'nav_text_colors': nav_text_colors,
     }
     return render(request, 'base/home.html', context)
 
