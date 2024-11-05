@@ -185,4 +185,4 @@ def add_task(request, pk=None):
         print(task)
         task_form = TaskForm(instance=task)
         
-        return render(request, 'base/add_task.html', {'task': task, 'form': task_form})
+        return render(request, 'base/task_detail.html', {'task': task, 'form': task_form})

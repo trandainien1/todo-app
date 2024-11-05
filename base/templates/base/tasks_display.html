@@ -7,7 +7,7 @@
     <div class="flex flex-row justify-between">
         <!-- Left: Title and Description -->
         <div>
-        <a href="./task_detail.html">
+        <a href="{% url 'add-task' task.id %}">
             <h1 class="text-green-500 font-semibold text-xl">
             {% if task.title|length > 15 %}
             {{task.title|slice:":15"}}...
