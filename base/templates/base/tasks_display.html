@@ -9,11 +9,15 @@
         <div>
         <a href="./task_detail.html">
             <h1 class="text-green-500 font-semibold text-xl">
+            {% if task.title|length > 15 %}
+            {{task.title|slice:":15"}}...
+            {% else %}
             {{task.title}}
+            {% endif %}
             </h1>
         </a>
         <p class="text-gray-500 text-md">
-            {{task.description|slice:":10"}}...
+            {{task.description|slice:":20"}}...
         </p>
         </div>
         <!-- Right: Toggle complete mode -->
