@@ -17,7 +17,7 @@
         </p>
         </div>
         <!-- Right: Toggle complete mode -->
-        <a href="">
+        <a href="{% url 'toggle-task' task.id %}?page={{current_page}}">
         {% if not task.completed %}
             <i class="bx bx-check-circle bx-sm text-blue-500"></i>
         {% else %}

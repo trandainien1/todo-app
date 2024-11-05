@@ -7,7 +7,7 @@ from django.contrib import messages
 from .forms import MyUserCreationForm, TaskForm
 
 @login_required(login_url='login')
-def home(request, filter_type):
+def home(request, filter_type='all'):
     form = TaskForm()
     # tasks = request.user.task_set.all()
     nav_text_colors = ['gray'] * 3
@@ -23,16 +23,19 @@ def home(request, filter_type):
         page_title = 'To Do Tasks'
         tasks = request.user.task_set.filter(completed=False) 
         nav_text_colors[2] = 'blue'
+        current_page = 'todo'
     elif filter_type == 'completed':
         page_title = 'Completed Tasks'
         # tasks = Task.objects.filter(completed=True) 
         tasks = request.user.task_set.filter(completed=True) 
         nav_text_colors[1] = 'blue'
+        current_page = 'completed'
     else:
         page_title = 'All Tasks'
         # tasks = Task.objects.all()
         tasks = request.user.task_set.all() 
         nav_text_colors[0] = 'blue'
+        current_page = 'all'
 
     tasks = tasks.order_by('-id')
 
@@ -41,6 +44,7 @@ def home(request, filter_type):
         'form': form,
         'page_title': page_title,
         'nav_text_colors': nav_text_colors,
+        'current_page': current_page
     }
     return render(request, 'base/home.html', context)
 
@@ -111,12 +115,12 @@ def toggle_task(request, id):
         task.save()
         messages.error(request, 'Please fill all the fields')
     
-    if page_title == 'All Tasks':
+    if page_title == 'all':
         return redirect('home')
-    elif page_title == 'To Do Tasks':
-        return redirect('/filter-task/todo')
+    elif page_title == 'todo':
+        return redirect('home', 'todo')
     else:
-        return redirect('/filter-task/completed')
+        return redirect('home', 'completed')
 
 def all_task(request):
     tasks = Task.objects.all()
