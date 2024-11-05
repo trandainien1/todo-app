@@ -58,12 +58,12 @@ def delete_task(request, pk):
         'tasks': tasks
     }
 
-    if page_title == 'All Tasks':
+    if page_title == 'all':
         return redirect('home')
-    elif page_title == 'To Do Tasks':
-        return redirect('/filter-task/todo')
+    elif page_title == 'todo':
+        return redirect('home', 'todo')
     else:
-        return redirect('/filter-task/completed')
+        return redirect('home', 'completed')
 
 def edit_task(request, pk):
     task = Task.objects.filter(id=pk)
