@@ -12,28 +12,41 @@ def home(request, filter_type='all'):
     # tasks = request.user.task_set.all()
     nav_text_colors = ['gray'] * 3
     if request.method == 'POST':
-        form = TaskForm(request.POST)
-        if form.is_valid():
-            task = form.save(commit=False)
-            task.user = request.user
-            task.save()
-            return redirect('home')
+        pass
+        # form = TaskForm(request.POST)
+        # if form.is_valid():
+        #     task = form.save(commit=False)
+        #     task.user = request.user
+        #     task.save()
+        #     return redirect('home')
+    query = request.GET.get('search')
+    
 
     if filter_type == 'todo':
         page_title = 'To Do Tasks'
-        tasks = request.user.task_set.filter(completed=False) 
+        if query is not None:
+            tasks = request.user.task_set.filter(completed=False, title__icontains=query)
+        else:
+            tasks = request.user.task_set.filter(completed=False) 
         nav_text_colors[2] = 'blue'
         current_page = 'todo'
     elif filter_type == 'completed':
         page_title = 'Completed Tasks'
         # tasks = Task.objects.filter(completed=True) 
-        tasks = request.user.task_set.filter(completed=True) 
+        if query is not None:
+            tasks = request.user.task_set.filter(completed=True, title__icontains=query)
+        else:
+            tasks = request.user.task_set.filter(completed=True) 
         nav_text_colors[1] = 'blue'
         current_page = 'completed'
     else:
         page_title = 'All Tasks'
         # tasks = Task.objects.all()
         tasks = request.user.task_set.all() 
+        if query is not None:
+            tasks = request.user.task_set.filter(title__icontains=query)
+        else:
+            tasks = request.user.task_set.all()
         nav_text_colors[0] = 'blue'
         current_page = 'all'
 

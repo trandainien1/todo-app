@@ -48,10 +48,24 @@
         ><i class="bx bxs-sad"></i>Todo</a
       >
     </nav>
+    
+    <section class='bg-white rounded-2xl shadow'>
+      {% comment %} Searching section {% endcomment %}
+      <form class='px-4 py-2 align-middle' method='GET'>
+        {%csrf_token%}
+        <input type='text' name='search' placeholder='What to find something?' class='text-base'/>
+        <button type='submit'>
+          <i class='bx bx-search'></i>
+        <button/>
+      </form>
+    </section>
+
     <!-- Tasks -->
     <section
       class="flex flex-1 flex-wrap justify-center gap-3 bg-[#fff0] w-10/12 md:w-11/12 h-full mb-3 rounded-2xl p-3 overflow-y-auto scrollbar-hide"
     >
+    
+
     {% include 'base/tasks_display.html' %}
 
     </section>
