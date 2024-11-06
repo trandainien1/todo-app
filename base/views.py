@@ -113,7 +113,8 @@ def toggle_task(request, id):
     if task:
         task.completed = not task.completed
         task.save()
-        messages.error(request, 'Please fill all the fields')
+    else:
+        messages.error(request, 'Task doesn\'t exist')
     
     if page_title == 'all':
         return redirect('home')
@@ -121,6 +122,17 @@ def toggle_task(request, id):
         return redirect('home', 'todo')
     else:
         return redirect('home', 'completed')
+
+def detail_toggle_task(request, id):
+    # page_title = request.GET.get('page')
+    task = Task.objects.get(id=id)
+    if task:
+        task.completed = not task.completed
+        task.save()
+    else:
+        messages.error(request, 'Task doesn\'t exist')
+    
+    return redirect('add-task', id)
 
 def all_task(request):
     tasks = Task.objects.all()
@@ -164,6 +176,8 @@ def add_task(request, pk=None):
                     user=request.user,
                 )
                 new_task.save()
+
+                return redirect('home')
             else:
                 task = Task.objects.get(id=pk)
                 
@@ -174,15 +188,17 @@ def add_task(request, pk=None):
                 
                 task.save()
 
-            return redirect('home')
+                return redirect('add-task', task.id)
         else:
             messages.error(request, 'Please fill out all the fields')
 
     if pk == None: # if user press 'add task'
         return render(request, 'base/add_task.html', {'task': None})
     else:
+        edit = request.GET.get('edit') 
+        edit = edit if edit != None else 'view'
         task = Task.objects.get(id=pk)
         print(task)
         task_form = TaskForm(instance=task)
         
-        return render(request, 'base/task_detail.html', {'task': task, 'form': task_form})
+        return render(request, 'base/task_detail.html', {'task': task, 'form': task_form, 'edit': edit})
